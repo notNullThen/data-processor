@@ -37,7 +37,7 @@ public class DataProcessor
 
     private readonly ReadOnlyDictionary<string, int> _items;
 
-    public IEnumerable<string> Items => _items.Select(item => item.Key).AsEnumerable();
+    public IEnumerable<string> Items => _items.Select(item => item.Key).OrderBy(itemKey => itemKey);
 
     public IEnumerable<string> GetItemPath(string itemName)
     {
