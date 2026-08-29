@@ -20,6 +20,7 @@ public class DataProcessor
         try
         {
             _items = GetItems();
+            Items = _items.Select(item => item.Key).OrderBy(itemKey => itemKey);
         }
         catch
         {
@@ -37,7 +38,7 @@ public class DataProcessor
 
     private readonly ReadOnlyDictionary<string, int> _items;
 
-    public IEnumerable<string> Items => _items.Select(item => item.Key).OrderBy(itemKey => itemKey);
+    public readonly IEnumerable<string> Items;
 
     public IEnumerable<string> GetItemPath(string itemName)
     {
