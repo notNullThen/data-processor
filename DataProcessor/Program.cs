@@ -12,16 +12,20 @@ for (var i = 0; i < dp.Items.Count(); i++)
 
 Console.WriteLine("\nWhat item would you like to search for?");
 
-var userInput = string.Empty;
-var parseSucceded = false;
-int parsedIndex = 0;
+var itemCount = dp.Items.Count();
+int parsedIndex;
 
-while (string.IsNullOrWhiteSpace(userInput) || !parseSucceded)
+while (true)
 {
-    Console.WriteLine("Please enter proper number");
-    userInput = Console.ReadLine();
-    parseSucceded = int.TryParse(userInput, out var itemIndex);
-    parsedIndex = itemIndex;
+    var userInput = Console.ReadLine();
+    var parseSucceded = int.TryParse(userInput, out parsedIndex);
+
+    if (parseSucceded && parsedIndex >= 1 && parsedIndex <= itemCount)
+    {
+        break;
+    }
+
+    Console.WriteLine("Please enter valid number");
 }
 
 Console.WriteLine();
