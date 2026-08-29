@@ -7,7 +7,7 @@ public class DataProcessor
     public DataProcessor(string dataFilePath)
     {
         _lines = File.ReadLines(dataFilePath);
-        Items = GetItems();
+        _items = GetItems();
     }
 
     private const string ItemMarker = " Item:";
@@ -16,11 +16,13 @@ public class DataProcessor
     private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
     private readonly IEnumerable<string> _lines;
 
-    public readonly ReadOnlyDictionary<string, int> Items;
+    private readonly ReadOnlyDictionary<string, int> _items;
+
+    public IEnumerable<string> Items => _items.Select(item => item.Key).AsEnumerable();
 
     public IEnumerable<string> GetItemPath(string itemName)
     {
-        var itemLineIndex = Items[itemName];
+        var itemLineIndex = _items[itemName];
         var depth = GetLineDepth(itemLineIndex, ItemMarker);
 
         var nextDepth = depth - 1;
