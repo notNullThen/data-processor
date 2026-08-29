@@ -1,37 +1,35 @@
+using System.Collections.ObjectModel;
+
 namespace DataProcessor.Core;
 
-public class DataProcessor(string filePath)
+public class DataProcessor
 {
+    public DataProcessor(string dataFilePath)
+    {
+        _lines = File.ReadLines(dataFilePath);
+        Items = GetItems();
+    }
+
     private const string ItemMarker = " Item:";
     private const string StepMarker = "+ ";
 
     private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
-    private readonly IEnumerable<string> Lines = File.ReadLines(filePath);
-    private readonly Dictionary<string, int> _items = [];
+    private readonly IEnumerable<string> _lines;
 
-    public void GetItems()
+    public readonly ReadOnlyDictionary<string, int> Items;
+
+    public IEnumerable<string> GetItemPath(string itemName)
     {
-        for (var i = 0; i < Lines.Count(); i++)
-        {
-            var line = Lines.ElementAt(i);
+        var itemLineIndex = Items[itemName];
+        var depth = GetLineDepth(itemLineIndex, ItemMarker);
 
-            if (line.Contains(ItemMarker))
-            {
-                var item = line.Split(ItemMarker)[1];
-                _items.Add(item.Trim(), i);
-            }
-        }
-    }
-
-    public List<string> GetPath(int itemLineIndex, int depth)
-    {
         var nextDepth = depth - 1;
 
         List<string> path = [];
 
         for (var i = itemLineIndex - 1; i >= 0; i--)
         {
-            var line = Lines.ElementAt(i);
+            var line = _lines.ElementAt(i);
 
             if (line.Contains(StepMarker) && GetLineDepth(i, StepMarker) == nextDepth)
             {
@@ -43,19 +41,32 @@ public class DataProcessor(string filePath)
         return path;
     }
 
-    public (int itemLineIndex, int depth) GetItemDepth(string itemName)
+    private ReadOnlyDictionary<string, int> GetItems()
     {
-        var lineIndex = _items[itemName];
-        var depth = GetLineDepth(lineIndex, ItemMarker);
+        Dictionary<string, int> items = [];
 
-        return (lineIndex, depth);
+        for (var i = 0; i < _lines.Count(); i++)
+        {
+            var line = _lines.ElementAt(i);
+
+            if (line.Contains(ItemMarker))
+            {
+                var item = line.Split(ItemMarker)[1];
+                items.Add(item.Trim(), i);
+            }
+        }
+
+        return items.AsReadOnly();
     }
 
-    public int GetLineDepth(int index, string marker)
+    private int GetLineDepth(int index, string marker)
     {
-        var line = Lines.ElementAt(index);
-        var lineEndIndex = line.IndexOf(marker);
-        var lineDepthPart = line[0..lineEndIndex];
+        var line = _lines.ElementAt(index);
+        var markerStartIndex = line.IndexOf(marker);
+        var lineDepthPart = line[0..markerStartIndex];
+
+        // here we can just split by depth length - which is 3
+        // but for reliability purposes was decided to use DepthSamples
         return lineDepthPart.Split(DepthSamples, StringSplitOptions.None).Length - 1;
     }
 }
