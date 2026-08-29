@@ -30,7 +30,14 @@ while (true)
 
 Console.WriteLine();
 
-var path = dp.GetItemPath(dp.Items.ElementAt(parsedIndex - 1));
+try
+{
+    var path = dp.GetItemPath(dp.Items.ElementAt(parsedIndex - 1));
 
-foreach (var step in path)
-    Console.WriteLine($"{step}");
+    foreach (var step in path)
+        Console.WriteLine($"{step}");
+}
+catch
+{
+    throw new Exception(DataProcessor.Core.DataProcessor.InvalidFileMessage);
+}

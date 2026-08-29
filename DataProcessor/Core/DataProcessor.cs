@@ -6,9 +6,27 @@ public class DataProcessor
 {
     public DataProcessor(string dataFilePath)
     {
-        _lines = File.ReadLines(dataFilePath);
-        _items = GetItems();
+        try
+        {
+            _lines = File.ReadLines(dataFilePath);
+        }
+        catch
+        {
+            throw new Exception($"[FILE DOES NOT EXIST] Tried to reach at \"{dataFilePath}\"");
+        }
+
+        try
+        {
+            _items = GetItems();
+        }
+        catch
+        {
+            throw new Exception(InvalidFileMessage);
+        }
     }
+
+    public const string InvalidFileMessage =
+        "[THE DATA FILE IS INVALID] Please re-check the file or investigate exception.";
 
     private const string ItemMarker = " Item:";
     private const string StepMarker = "+ ";
