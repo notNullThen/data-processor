@@ -10,7 +10,6 @@ public class DataProcessor(string filePath)
     private const string StepMarker = "+ ";
 
     private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
-
     private readonly Dictionary<string, int> items = [];
 
     public void GetItems()
@@ -27,12 +26,39 @@ public class DataProcessor(string filePath)
         }
     }
 
-    public int GetItemDepth(string itemName)
+    public List<string> GetPath(int itemLineIndex, int depth)
     {
-        var itemIndex = items[itemName];
-        var itemLine = Lines.ElementAt(itemIndex);
-        var itemDepthPart = itemLine[0..itemLine.IndexOf(ItemMarker)];
+        var nextDepth = depth - 1;
 
-        return itemDepthPart.Split(DepthSamples, StringSplitOptions.None).Length - 1;
+        List<string> path = [];
+
+        for (var i = itemLineIndex - 1; i >= 0; i--)
+        {
+            var line = Lines.ElementAt(i);
+
+            if (line.Contains(StepMarker) && GetLineDepth(i, StepMarker) == nextDepth)
+            {
+                path.Insert(0, line.Split(StepMarker)[1]);
+                nextDepth--;
+            }
+        }
+
+        return path;
+    }
+
+    public (int itemLineIndex, int depth) GetItemDepth(string itemName)
+    {
+        var lineIndex = items[itemName];
+        var depth = GetLineDepth(lineIndex, ItemMarker);
+
+        return (lineIndex, depth);
+    }
+
+    public int GetLineDepth(int index, string marker)
+    {
+        var line = Lines.ElementAt(index);
+        var lineEndIndex = line.IndexOf(marker);
+        var lineDepthPart = line[0..lineEndIndex];
+        return lineDepthPart.Split(DepthSamples, StringSplitOptions.None).Length - 1;
     }
 }

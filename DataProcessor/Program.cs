@@ -5,4 +5,6 @@ var dp = new DataProcessor.Core.DataProcessor(
 );
 
 dp.GetItems();
-dp.GetItemDepth("Allen Wrench Set");
+var (itemLineIndex, depth) = dp.GetItemDepth("Allen Wrench Set");
+var path = dp.GetPath(itemLineIndex, depth);
+Console.WriteLine();
