@@ -6,7 +6,9 @@ public class DataProcessor(string filePath)
 {
     private readonly IEnumerable<string> Lines = File.ReadLines(filePath);
 
-    private const string ItemMarker = "Item:";
+    private const string ItemMarker = " Item:";
+    private const int DepthLength = 3;
+    private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
 
     private readonly Dictionary<string, int> items = [];
 
@@ -22,7 +24,14 @@ public class DataProcessor(string filePath)
                 items.Add(item.Trim(), i);
             }
         }
+    }
 
-        Console.WriteLine(JsonSerializer.Serialize(items));
+    public int GetItemDepth(string itemName)
+    {
+        var itemIndex = items[itemName];
+        var itemLine = Lines.ElementAt(itemIndex);
+        var itemDepthPart = itemLine[0..itemLine.IndexOf(ItemMarker)];
+
+        return itemDepthPart.Split(DepthSamples, StringSplitOptions.None).Length - 1;
     }
 }

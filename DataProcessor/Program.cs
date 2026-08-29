@@ -5,3 +5,4 @@ var dp = new DataProcessor.Core.DataProcessor(
 );
 
 dp.GetItems();
+dp.GetItemDepth("Allen Wrench Set");
