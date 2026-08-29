@@ -12,7 +12,9 @@ public class DataProcessor
         }
         catch
         {
-            throw new Exception($"[FILE DOES NOT EXIST] Tried to reach at \"{dataFilePath}\"");
+            throw new FileNotFoundException(
+                $"[FILE DOES NOT EXIST] Tried to reach at \"{dataFilePath}\""
+            );
         }
 
         try
@@ -25,8 +27,7 @@ public class DataProcessor
         }
     }
 
-    public const string InvalidFileMessage =
-        "[THE DATA FILE IS INVALID] Please re-check the file or investigate exception.";
+    public const string InvalidFileMessage = "[THE DATA FILE IS INVALID] Please re-check the file.";
 
     private const string ItemMarker = " Item:";
     private const string StepMarker = "+ ";
@@ -86,7 +87,7 @@ public class DataProcessor
         var lineDepthPart = line[0..markerStartIndex];
 
         // here we can just split by depth length - which is 3
-        // but for reliability purposes was decided to use DepthSamples
+        // but for reliability & error handling purposes was decided to use DepthSamples
         return lineDepthPart.Split(DepthSamples, StringSplitOptions.None).Length - 1;
     }
 }
