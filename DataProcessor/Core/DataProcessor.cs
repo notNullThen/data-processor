@@ -2,19 +2,12 @@ namespace DataProcessor.Core;
 
 public class DataProcessor(string filePath)
 {
-    private const string ItemStart = "Item:";
-    private const char NextStep = '└';
-    private const char Branch = '├';
-    private const char LineStart = '|';
-
-    private const char StepStart = '+';
-    private readonly char[] Fillers = ['─', LineStart];
-
     private readonly IEnumerable<string> Content = File.ReadLines(filePath);
 
     public void ParseItems()
     {
-        Item item = new();
+        List<Item> items = [];
+        var currentItem = new Item();
 
         foreach (var line in Content)
         {
@@ -25,10 +18,24 @@ public class DataProcessor(string filePath)
                 if (currentChar.Equals('+'))
                 {
                     var step = line[(i + 1)..line.Length];
-                    item = item.Add(step.Trim());
+                    currentItem = currentItem.Add(step.Trim());
+
                     break;
                 }
             }
+
+            if (line.Contains("Item:"))
+            {
+                var step = line[line.IndexOf("Item:")..line.Length];
+                currentItem = currentItem.Add(step.Trim());
+                items.Add(currentItem);
+                currentItem = new();
+            }
+        }
+
+        foreach (var item in items)
+        {
+            item.PrintPath();
         }
     }
 }
