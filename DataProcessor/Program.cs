@@ -1,4 +1,9 @@
-﻿var dataFilePath = "/home/e-ubuntu/projects/data-processor/DataProcessor/TestData/Data.medium.txt";
+﻿if (args.Length <= 0)
+    throw new ArgumentException(
+        "[FILE PATH NOT PROVIDED] Please re-check file path argument you passed."
+    );
+
+var dataFilePath = args[0];
 
 var dp = new DataProcessor.Core.DataProcessor(dataFilePath);
 
