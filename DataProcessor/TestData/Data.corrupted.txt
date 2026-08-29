@@ -1,0 +1,15 @@
++ Walk to the end of the hall.
+├s─+ Turn left.
+| s└s─+ Go through the first door on the right.
+| s f ├p─+ Open the cabinet on the left.
+| s f |  └p─ Item: Cookies
+| s f ├p─+ Open the cabinet above the sink.
+| s f |  └p─ Itfem: Coffee Mug
+| s f └p─  Open the refridgerator.
+| s fs f └p─ Item: Milk  
+└p─+ Turn right.
+ s fp─+ Go through the door at the end of the hall.
+ s fs fp─+ Look on top of the desk.
+ s fs f  └p─ Item: Mobile Phone
+ s fs fp─  Open the desk drawer.
+ s fs fs fp─ Item: Pencils

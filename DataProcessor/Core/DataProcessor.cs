@@ -52,6 +52,15 @@ public class DataProcessor
         {
             var line = _lines.ElementAt(i);
 
+            if (
+                !DepthSamples.Any(line.Contains)
+                && !line.Contains(StepMarker)
+                && !line.Contains(ItemMarker)
+            )
+            {
+                throw new FileLoadException(InvalidFileMessage);
+            }
+
             if (line.Contains(StepMarker) && GetLineDepth(i, StepMarker) == nextDepth)
             {
                 path.Insert(0, line.Split(StepMarker)[1]);
