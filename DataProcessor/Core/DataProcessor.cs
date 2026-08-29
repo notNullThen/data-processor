@@ -1,16 +1,13 @@
-using System.Text.Json;
-
 namespace DataProcessor.Core;
 
 public class DataProcessor(string filePath)
 {
-    private readonly IEnumerable<string> Lines = File.ReadLines(filePath);
-
     private const string ItemMarker = " Item:";
     private const string StepMarker = "+ ";
 
     private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
-    private readonly Dictionary<string, int> items = [];
+    private readonly IEnumerable<string> Lines = File.ReadLines(filePath);
+    private readonly Dictionary<string, int> _items = [];
 
     public void GetItems()
     {
@@ -21,7 +18,7 @@ public class DataProcessor(string filePath)
             if (line.Contains(ItemMarker))
             {
                 var item = line.Split(ItemMarker)[1];
-                items.Add(item.Trim(), i);
+                _items.Add(item.Trim(), i);
             }
         }
     }
@@ -48,7 +45,7 @@ public class DataProcessor(string filePath)
 
     public (int itemLineIndex, int depth) GetItemDepth(string itemName)
     {
-        var lineIndex = items[itemName];
+        var lineIndex = _items[itemName];
         var depth = GetLineDepth(lineIndex, ItemMarker);
 
         return (lineIndex, depth);
