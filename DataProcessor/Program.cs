@@ -1,6 +1,7 @@
-﻿var dp = new DataProcessor.Core.DataProcessor(
-    "/home/e-ubuntu/projects/data-processor/DataProcessor/TestData/Data.small.txt"
+﻿using System.Text.Json;
+
+var dp = new DataProcessor.Core.DataProcessor(
+    "/home/e-ubuntu/projects/data-processor/DataProcessor/TestData/Data.medium.txt"
 );
 
-Console.WriteLine("File Content:\n");
-dp.ParseItems();
+Console.WriteLine(JsonSerializer.Serialize(dp.GetItems()));

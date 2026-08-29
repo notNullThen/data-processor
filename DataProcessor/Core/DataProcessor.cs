@@ -2,40 +2,23 @@ namespace DataProcessor.Core;
 
 public class DataProcessor(string filePath)
 {
-    private readonly IEnumerable<string> Content = File.ReadLines(filePath);
+    private readonly IEnumerable<string> Lines = File.ReadLines(filePath);
 
-    public void ParseItems()
+    private const string ItemMarker = "Item:";
+
+    public IEnumerable<string> GetItems()
     {
-        List<Item> items = [];
-        var currentItem = new Item();
+        List<string> items = [];
 
-        foreach (var line in Content)
+        foreach (var line in Lines)
         {
-            for (var i = 0; i < line.Length; i++)
+            if (line.Contains(ItemMarker))
             {
-                var currentChar = line[i];
-
-                if (currentChar.Equals('+'))
-                {
-                    var step = line[(i + 1)..line.Length];
-                    currentItem = currentItem.Add(step.Trim());
-
-                    break;
-                }
-            }
-
-            if (line.Contains("Item:"))
-            {
-                var step = line[line.IndexOf("Item:")..line.Length];
-                currentItem = currentItem.Add(step.Trim());
-                items.Add(currentItem);
-                currentItem = new();
+                var item = line.Split(ItemMarker)[1];
+                items.Add(item.Trim());
             }
         }
 
-        foreach (var item in items)
-        {
-            item.PrintPath();
-        }
+        return items;
     }
 }
