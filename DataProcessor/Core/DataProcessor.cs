@@ -3,53 +3,32 @@ namespace DataProcessor.Core;
 public class DataProcessor(string filePath)
 {
     private const string ItemStart = "Item:";
+    private const char NextStep = '└';
+    private const char Branch = '├';
+    private const char LineStart = '|';
+
     private const char StepStart = '+';
-    private const char Filler = '─';
+    private readonly char[] Fillers = ['─', LineStart];
 
-    private readonly char Separator = '|';
-    private readonly char[] NextStepSeparators = ['├', '└'];
-
-    private string FileContent = File.ReadAllText(filePath);
+    private readonly IEnumerable<string> Content = File.ReadLines(filePath);
 
     public void ParseItems()
     {
-        var steps = new Step();
+        Item item = new();
 
-        bool stepStarted = false;
-
-        var currentStep = string.Empty;
-
-        foreach (var currentChar in FileContent)
+        foreach (var line in Content)
         {
-            if (currentChar.Equals(Filler))
-                continue;
-
-            // Start step
-            if (currentChar.Equals(StepStart))
+            for (var i = 0; i < line.Length; i++)
             {
-                stepStarted = true;
-                continue;
-            }
+                var currentChar = line[i];
 
-            // End the step
-            if (currentChar.Equals(Separator) || NextStepSeparators.Contains(currentChar))
-            {
-                var parsedStep = currentStep.Trim();
-
-                if (!string.IsNullOrWhiteSpace(parsedStep))
-                    steps = steps.Add(parsedStep);
-
-                currentStep = string.Empty;
-                stepStarted = false;
-                continue;
-            }
-
-            if (stepStarted)
-            {
-                currentStep += currentChar;
+                if (currentChar.Equals('+'))
+                {
+                    var step = line[(i + 1)..line.Length];
+                    item = item.Add(step.Trim());
+                    break;
+                }
             }
         }
-
-        steps = steps.First;
     }
 }
