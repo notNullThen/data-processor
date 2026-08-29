@@ -7,7 +7,8 @@ public class DataProcessor(string filePath)
     private readonly IEnumerable<string> Lines = File.ReadLines(filePath);
 
     private const string ItemMarker = " Item:";
-    private const int DepthLength = 3;
+    private const string StepMarker = "+ ";
+
     private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
 
     private readonly Dictionary<string, int> items = [];
