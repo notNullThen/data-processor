@@ -1,3 +1,12 @@
 {
-    "dotnet.defaultSolution": "DataProcessor.slnx"
+    "dotnet.defaultSolution": "DataProcessor.slnx",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "csharpier.csharpier-vscode",
+    "[csharp]": {
+        "editor.maxTokenizationLineLength": 2500,
+        "editor.defaultFormatter": "csharpier.csharpier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
 }
