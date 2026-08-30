@@ -4,6 +4,10 @@ My take on Data File processing console .NET app which finds path to specified I
 
 - `main` - the approach considered to be **the most optimal** for the current problem.
 - `node-approach` - the approach with Node class usage.
+- `bonus-ai-orchestrator` - relying on local LLM for parsing and steps defining. 
+
+<img src="Screenshots/screenshot.png" alt="App Screenshot" width="700" />
+
 
 ## Features
 
