@@ -1,6 +1,51 @@
-﻿var dp = new DataProcessor.Core.DataProcessor(
-    "/home/e-ubuntu/projects/data-processor/DataProcessor/TestData/Data.small.txt"
-);
+﻿if (args.Length <= 0)
+    throw new ArgumentException(
+        "[FILE PATH NOT PROVIDED] Please re-check file path argument you passed."
+    );
 
-Console.WriteLine("File Content:\n");
-dp.ParseItems();
+var dataFilePath = args[0];
+
+var dp = new DataProcessor.Core.DataProcessor(dataFilePath);
+
+Console.WriteLine("Available items:\n");
+
+for (var i = 0; i < dp.Items.Count(); i++)
+{
+    var item = dp.Items.ElementAt(i);
+    Console.WriteLine($"[{i + 1}] - {item}");
+}
+
+Console.WriteLine("\nWhat item would you like to search for?");
+
+var itemCount = dp.Items.Count();
+int parsedIndex;
+
+while (true)
+{
+    var userInput = Console.ReadLine();
+    var parseSucceded = int.TryParse(userInput, out parsedIndex);
+
+    if (parseSucceded && parsedIndex >= 1 && parsedIndex <= itemCount)
+    {
+        break;
+    }
+
+    Console.WriteLine("Please enter valid number");
+}
+
+Console.WriteLine();
+
+try
+{
+    var item = dp.GetItem(dp.Items.ElementAt(parsedIndex - 1));
+
+    while (item != null)
+    {
+        Console.WriteLine($"{item.Value}");
+        item = item.Next;
+    }
+}
+catch
+{
+    throw new Exception(DataProcessor.Core.DataProcessor.InvalidFileMessage);
+}
