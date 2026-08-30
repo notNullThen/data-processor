@@ -8,7 +8,7 @@ public class DataProcessor
     {
         try
         {
-            _lines = File.ReadLines(dataFilePath);
+            Lines = File.ReadLines(dataFilePath);
         }
         catch
         {
@@ -31,54 +31,20 @@ public class DataProcessor
     public const string InvalidFileMessage = "[THE DATA FILE IS INVALID] Please re-check the file.";
 
     private const string ItemMarker = " Item:";
-    private const string StepMarker = "+ ";
 
-    private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
-    private readonly IEnumerable<string> _lines;
+    public readonly IEnumerable<string> Lines;
 
     private readonly ReadOnlyDictionary<string, int> _items;
 
     public readonly IEnumerable<string> Items;
 
-    public IEnumerable<string> GetItemPath(string itemName)
-    {
-        var itemLineIndex = _items[itemName];
-        var depth = GetLineDepth(itemLineIndex, ItemMarker);
-
-        var nextDepth = depth - 1;
-
-        List<string> path = [];
-
-        for (var i = itemLineIndex - 1; i >= 0; i--)
-        {
-            var line = _lines.ElementAt(i);
-
-            if (
-                !DepthSamples.Any(line.Contains)
-                && !line.Contains(StepMarker)
-                && !line.Contains(ItemMarker)
-            )
-            {
-                throw new FileLoadException(InvalidFileMessage);
-            }
-
-            if (line.Contains(StepMarker) && GetLineDepth(i, StepMarker) == nextDepth)
-            {
-                path.Insert(0, line.Split(StepMarker)[1]);
-                nextDepth--;
-            }
-        }
-
-        return path;
-    }
-
     private ReadOnlyDictionary<string, int> GetItems()
     {
         Dictionary<string, int> items = [];
 
-        for (var i = 0; i < _lines.Count(); i++)
+        for (var i = 0; i < Lines.Count(); i++)
         {
-            var line = _lines.ElementAt(i);
+            var line = Lines.ElementAt(i);
 
             if (line.Contains(ItemMarker))
             {
@@ -88,16 +54,5 @@ public class DataProcessor
         }
 
         return items.AsReadOnly();
-    }
-
-    private int GetLineDepth(int index, string marker)
-    {
-        var line = _lines.ElementAt(index);
-        var markerStartIndex = line.IndexOf(marker);
-        var lineDepthPart = line[0..markerStartIndex];
-
-        // here we can just split by depth length - which is 3
-        // but for reliability & error handling purposes was decided to use DepthSamples
-        return lineDepthPart.Split(DepthSamples, StringSplitOptions.None).Length - 1;
     }
 }

@@ -1,4 +1,9 @@
-﻿if (args.Length <= 0)
+﻿using AIOrchestrator.Core;
+using DataProcessor.AiCore;
+
+const string modelName = "gemma4";
+
+if (args.Length <= 0)
     throw new ArgumentException(
         "[FILE PATH NOT PROVIDED] Please re-check file path argument you passed."
     );
@@ -6,6 +11,11 @@
 var dataFilePath = args[0];
 
 var dp = new DataProcessor.Core.DataProcessor(dataFilePath);
+var ai = new AiManager(
+    modelName,
+    appInstance: new AiFacade(dp),
+    options: new() { Temperature = 0 }
+);
 
 Console.WriteLine("Available items:\n");
 
@@ -35,14 +45,4 @@ while (true)
 
 Console.WriteLine();
 
-try
-{
-    var path = dp.GetItemPath(dp.Items.ElementAt(parsedIndex - 1));
-
-    foreach (var step in path)
-        Console.WriteLine($"{step}");
-}
-catch
-{
-    throw new Exception(DataProcessor.Core.DataProcessor.InvalidFileMessage);
-}
+await ai.StartAsync(parsedIndex.ToString());
