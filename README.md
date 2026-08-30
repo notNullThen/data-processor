@@ -21,6 +21,8 @@ My take on Data File processing console .NET app which finds path to specified I
 
 ## How to run
 
+For this solution your system needs to have Ollama installed. The Ollama base URL is set in Program.cs.
+
 1. Ensure you have installed .NET environment
 2. Clone the project
 

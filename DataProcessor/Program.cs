@@ -1,7 +1,7 @@
 ﻿using AIOrchestrator.Core;
 using DataProcessor.AiCore;
 
-const string modelName = "gemma4";
+const string modelName = "ministral-3:3b";
 
 if (args.Length <= 0)
     throw new ArgumentException(
@@ -45,4 +45,5 @@ while (true)
 
 Console.WriteLine();
 
-await ai.StartAsync(parsedIndex.ToString());
+var selectedItem = dp.Items.ElementAt(parsedIndex - 1);
+await ai.StartAsync(selectedItem);
