@@ -1,5 +1,10 @@
 My take on Data File processing console .NET app which finds path to specified Item
 
+### Project has 2 branches:
+
+- `main` - the approach considered to be **the most optimal** for the current problem.
+- `node-approach` - the approach with Node class usage.
+
 ## Features
 
 - Shows the list of items.
