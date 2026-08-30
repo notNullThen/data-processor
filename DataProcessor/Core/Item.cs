@@ -1,33 +1,34 @@
 namespace DataProcessor.Core;
 
-public sealed class Item(string? value = null, Item? next = null)
+public sealed class Item(string? value = null, Item? previous = null, Item? next = null)
 {
     public string? Value => value;
 
+    public Item? Previous => previous;
+
     public Item? Next => next;
 
-    public Item Add(string value)
+    public Item First
+    {
+        get
+        {
+            var currentItem = this;
+            while (currentItem.Previous != null)
+                currentItem = currentItem.Previous;
+
+            return currentItem;
+        }
+    }
+
+    public Item AddPrevious(string value)
     {
         if (string.IsNullOrEmpty(Value))
         {
             return new(value);
         }
 
-        return new Item(value: Value, next: Next == null ? new Item(value) : Next.Add(value));
-    }
+        var item = new Item(value, next: First);
 
-    public void PrintPath()
-    {
-        List<string> path = [Value!];
-
-        var currentItem = this;
-
-        while (currentItem.Next != null)
-        {
-            currentItem = currentItem.Next;
-            path.Add(currentItem.Value!);
-        }
-
-        Console.WriteLine(string.Join(" > ", path));
+        return item;
     }
 }

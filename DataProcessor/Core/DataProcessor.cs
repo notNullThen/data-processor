@@ -1,41 +1,103 @@
+using System.Collections.ObjectModel;
+
 namespace DataProcessor.Core;
 
-public class DataProcessor(string filePath)
+public class DataProcessor
 {
-    private readonly IEnumerable<string> Content = File.ReadLines(filePath);
-
-    public void ParseItems()
+    public DataProcessor(string dataFilePath)
     {
-        List<Item> items = [];
-        var currentItem = new Item();
-
-        foreach (var line in Content)
+        try
         {
-            for (var i = 0; i < line.Length; i++)
+            _lines = File.ReadLines(dataFilePath);
+        }
+        catch
+        {
+            throw new FileNotFoundException(
+                $"[FILE DOES NOT EXIST] Tried to reach at \"{dataFilePath}\""
+            );
+        }
+
+        try
+        {
+            _items = ParseItems();
+            Items = _items.Select(item => item.Key).OrderBy(itemKey => itemKey);
+        }
+        catch
+        {
+            throw new Exception(InvalidFileMessage);
+        }
+    }
+
+    public const string InvalidFileMessage = "[THE DATA FILE IS INVALID] Please re-check the file.";
+
+    private const string ItemMarker = " Item:";
+    private const string StepMarker = "+ ";
+
+    private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
+    private readonly IEnumerable<string> _lines;
+
+    private readonly ReadOnlyDictionary<string, int> _items;
+
+    public readonly IEnumerable<string> Items;
+
+    public Item GetItem(string itemName)
+    {
+        var itemLineIndex = _items[itemName];
+        var depth = GetLineDepth(itemLineIndex, ItemMarker);
+
+        var nextDepth = depth - 1;
+
+        var item = new Item();
+
+        for (var i = itemLineIndex - 1; i >= 0; i--)
+        {
+            var line = _lines.ElementAt(i);
+
+            if (
+                !DepthSamples.Any(line.Contains)
+                && !line.Contains(StepMarker)
+                && !line.Contains(ItemMarker)
+            )
             {
-                var currentChar = line[i];
-
-                if (currentChar.Equals('+'))
-                {
-                    var step = line[(i + 1)..line.Length];
-                    currentItem = currentItem.Add(step.Trim());
-
-                    break;
-                }
+                throw new FileLoadException(InvalidFileMessage);
             }
 
-            if (line.Contains("Item:"))
+            if (line.Contains(StepMarker) && GetLineDepth(i, StepMarker) == nextDepth)
             {
-                var step = line[line.IndexOf("Item:")..line.Length];
-                currentItem = currentItem.Add(step.Trim());
-                items.Add(currentItem);
-                currentItem = new();
+                item = item.AddPrevious(line.Split(StepMarker)[1]);
+                nextDepth--;
             }
         }
 
-        foreach (var item in items)
+        return item.First;
+    }
+
+    private ReadOnlyDictionary<string, int> ParseItems()
+    {
+        Dictionary<string, int> items = [];
+
+        for (var i = 0; i < _lines.Count(); i++)
         {
-            item.PrintPath();
+            var line = _lines.ElementAt(i);
+
+            if (line.Contains(ItemMarker))
+            {
+                var item = line.Split(ItemMarker)[1];
+                items.Add(item.Trim(), i);
+            }
         }
+
+        return items.AsReadOnly();
+    }
+
+    private int GetLineDepth(int index, string marker)
+    {
+        var line = _lines.ElementAt(index);
+        var markerStartIndex = line.IndexOf(marker);
+        var lineDepthPart = line[0..markerStartIndex];
+
+        // here we can just split by depth length - which is 3
+        // but for reliability & error handling purposes was decided to use DepthSamples
+        return lineDepthPart.Split(DepthSamples, StringSplitOptions.None).Length - 1;
     }
 }
