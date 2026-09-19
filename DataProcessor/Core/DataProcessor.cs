@@ -8,7 +8,7 @@ public class DataProcessor
     {
         try
         {
-            _lines = File.ReadLines(dataFilePath);
+            _lines = File.ReadAllLines(dataFilePath);
         }
         catch
         {
@@ -20,7 +20,7 @@ public class DataProcessor
         try
         {
             _items = GetItems();
-            Items = _items.Select(item => item.Key).OrderBy(itemKey => itemKey);
+            Items = [.. _items.Select(item => item.Key).OrderBy(itemKey => itemKey)];
         }
         catch
         {
@@ -34,13 +34,13 @@ public class DataProcessor
     private const string StepMarker = "+ ";
     private const int IdentLength = 3;
 
-    private readonly IEnumerable<string> _lines;
+    private readonly string[] _lines;
 
     private readonly ReadOnlyDictionary<string, int> _items;
 
-    public IEnumerable<string> Items { get; }
+    public string[] Items { get; }
 
-    public IEnumerable<string> GetItemPath(string itemName)
+    public string[] GetItemPath(string itemName)
     {
         var itemLineIndex = _items[itemName];
         var depth = GetLineDepth(itemLineIndex, ItemMarker);
@@ -51,7 +51,7 @@ public class DataProcessor
 
         for (var i = itemLineIndex - 1; i >= 0; i--)
         {
-            var line = _lines.ElementAt(i);
+            var line = _lines[i];
 
             if (!line.Contains(StepMarker) && !line.Contains(ItemMarker))
             {
@@ -65,16 +65,16 @@ public class DataProcessor
             }
         }
 
-        return path;
+        return [.. path];
     }
 
     private ReadOnlyDictionary<string, int> GetItems()
     {
         Dictionary<string, int> items = [];
 
-        for (var i = 0; i < _lines.Count(); i++)
+        for (var i = 0; i < _lines.Length; i++)
         {
-            var line = _lines.ElementAt(i);
+            var line = _lines[i];
 
             if (line.Contains(ItemMarker))
             {
@@ -88,7 +88,7 @@ public class DataProcessor
 
     private int GetLineDepth(int index, string marker)
     {
-        var line = _lines.ElementAt(index);
+        var line = _lines[index];
 
         var lineDepthLength = line.IndexOf(marker);
         if (!(lineDepthLength % 3 == 0))
