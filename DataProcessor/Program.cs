@@ -9,15 +9,15 @@ var dp = new DataProcessor.Core.DataProcessor(dataFilePath);
 
 Console.WriteLine("Available items:\n");
 
-for (var i = 0; i < dp.Items.Count(); i++)
+for (var i = 0; i < dp.Items.Length; i++)
 {
-    var itemName = dp.Items.ElementAt(i);
+    var itemName = dp.Items[i];
     Console.WriteLine($"[{i + 1}] - {itemName}");
 }
 
 Console.WriteLine("\nWhat item would you like to search for?");
 
-var itemCount = dp.Items.Count();
+var itemCount = dp.Items.Length;
 int parsedIndex;
 
 while (true)
@@ -35,7 +35,7 @@ while (true)
 
 Console.WriteLine();
 
-var item = dp.GetItem(dp.Items.ElementAt(parsedIndex - 1));
+var item = dp.GetItem(dp.Items[parsedIndex - 1]);
 
 while (item != null)
 {
