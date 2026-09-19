@@ -32,8 +32,8 @@ public class DataProcessor
 
     private const string ItemMarker = " Item:";
     private const string StepMarker = "+ ";
+    private const int IdentLength = 3;
 
-    private readonly string[] DepthSamples = ["└──", "├──", "|  ", "   "];
     private readonly IEnumerable<string> _lines;
 
     private readonly ReadOnlyDictionary<string, int> _items;
@@ -53,11 +53,7 @@ public class DataProcessor
         {
             var line = _lines.ElementAt(i);
 
-            if (
-                !DepthSamples.Any(line.Contains)
-                && !line.Contains(StepMarker)
-                && !line.Contains(ItemMarker)
-            )
+            if (!line.Contains(StepMarker) && !line.Contains(ItemMarker))
             {
                 throw new FileLoadException(InvalidFileMessage);
             }
@@ -93,11 +89,11 @@ public class DataProcessor
     private int GetLineDepth(int index, string marker)
     {
         var line = _lines.ElementAt(index);
-        var markerStartIndex = line.IndexOf(marker);
-        var lineDepthPart = line[0..markerStartIndex];
 
-        // here we can just split by depth length - which is 3
-        // but for reliability & error handling purposes was decided to use DepthSamples
-        return lineDepthPart.Split(DepthSamples, StringSplitOptions.None).Length - 1;
+        var lineDepthLength = line.IndexOf(marker);
+        if (!(lineDepthLength % 3 == 0))
+            throw new InvalidDataException("File identation is wrong.");
+
+        return lineDepthLength / IdentLength;
     }
 }
