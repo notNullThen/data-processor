@@ -38,7 +38,7 @@ public class DataProcessor
 
     private readonly ReadOnlyDictionary<string, int> _items;
 
-    public readonly IEnumerable<string> Items;
+    public IEnumerable<string> Items { get; }
 
     public IEnumerable<string> GetItemPath(string itemName)
     {
