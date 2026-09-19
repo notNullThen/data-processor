@@ -5,7 +5,17 @@
 
 var dataFilePath = args[0];
 
-var dp = new DataProcessor.Core.DataProcessor(dataFilePath);
+string[] lines = [];
+try
+{
+    lines = File.ReadAllLines(dataFilePath);
+}
+catch
+{
+    throw new FileNotFoundException($"[FILE DOES NOT EXIST] Tried to reach at \"{dataFilePath}\"");
+}
+
+var dp = new DataProcessor.Core.DataProcessor(lines);
 
 Console.WriteLine("Available items:\n");
 

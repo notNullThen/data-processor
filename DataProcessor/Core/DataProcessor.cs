@@ -4,18 +4,9 @@ namespace DataProcessor.Core;
 
 public class DataProcessor
 {
-    public DataProcessor(string dataFilePath)
+    public DataProcessor(string[] lines)
     {
-        try
-        {
-            _lines = File.ReadAllLines(dataFilePath);
-        }
-        catch
-        {
-            throw new FileNotFoundException(
-                $"[FILE DOES NOT EXIST] Tried to reach at \"{dataFilePath}\""
-            );
-        }
+        _lines = lines;
 
         try
         {
