@@ -11,8 +11,8 @@ Console.WriteLine("Available items:\n");
 
 for (var i = 0; i < dp.Items.Count(); i++)
 {
-    var item = dp.Items.ElementAt(i);
-    Console.WriteLine($"[{i + 1}] - {item}");
+    var itemName = dp.Items.ElementAt(i);
+    Console.WriteLine($"[{i + 1}] - {itemName}");
 }
 
 Console.WriteLine("\nWhat item would you like to search for?");
@@ -35,17 +35,10 @@ while (true)
 
 Console.WriteLine();
 
-try
-{
-    var item = dp.GetItem(dp.Items.ElementAt(parsedIndex - 1));
+var item = dp.GetItem(dp.Items.ElementAt(parsedIndex - 1));
 
-    while (item != null)
-    {
-        Console.WriteLine($"{item.Value}");
-        item = item.Next;
-    }
-}
-catch
+while (item != null)
 {
-    throw new Exception(DataProcessor.Core.DataProcessor.InvalidFileMessage);
+    Console.WriteLine($"{item.Value}");
+    item = item.Next;
 }
