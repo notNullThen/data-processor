@@ -15,19 +15,19 @@ catch
     throw new FileNotFoundException($"[FILE DOES NOT EXIST] Tried to reach at \"{dataFilePath}\"");
 }
 
-var dp = new DataProcessor.Core.DataProcessor(lines);
+var dataProcessor = new DataProcessor.Core.DataProcessor(lines);
 
 Console.WriteLine("Available items:\n");
 
-for (var i = 0; i < dp.Items.Length; i++)
+for (var i = 0; i < dataProcessor.Items.Length; i++)
 {
-    var item = dp.Items[i];
+    var item = dataProcessor.Items[i];
     Console.WriteLine($"[{i + 1}] - {item}");
 }
 
 Console.WriteLine("\nWhat item would you like to search for?");
 
-var itemCount = dp.Items.Length;
+var itemCount = dataProcessor.Items.Length;
 int parsedIndex;
 
 while (true)
@@ -45,7 +45,7 @@ while (true)
 
 Console.WriteLine();
 
-var path = dp.GetItemPath(dp.Items[parsedIndex - 1]);
+var path = dataProcessor.GetItemPath(dataProcessor.Items[parsedIndex - 1]);
 
 foreach (var step in path)
     Console.WriteLine($"{step}");
