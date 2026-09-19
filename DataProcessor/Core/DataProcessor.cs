@@ -15,7 +15,7 @@ public class DataProcessor
         }
         catch
         {
-            throw new Exception(InvalidFileMessage);
+            throw new InvalidDataException(InvalidFileMessage);
         }
     }
 
@@ -46,7 +46,9 @@ public class DataProcessor
 
             if (!line.Contains(StepMarker) && !line.Contains(ItemMarker))
             {
-                throw new FileLoadException(InvalidFileMessage);
+                throw new FileLoadException(
+                    $"[INVALID LINE] Line #{i + 1} contains neither the \"{StepMarker}\" step marker nor the \"{ItemMarker}\" item marker. Line content is below:\n{line}\n"
+                );
             }
 
             if (line.Contains(StepMarker) && GetLineDepth(i, StepMarker) == nextDepth)
@@ -83,7 +85,9 @@ public class DataProcessor
 
         var lineDepthLength = line.IndexOf(marker);
         if (!(lineDepthLength % 3 == 0))
-            throw new InvalidDataException("File identation is wrong.");
+            throw new InvalidDataException(
+                $"[INVALID LINE] Line #{index + 1} has incorrect identation length {IdentLength}. Line content is below:\n{line}\n"
+            );
 
         return lineDepthLength / IdentLength;
     }
