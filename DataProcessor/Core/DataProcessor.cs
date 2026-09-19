@@ -10,8 +10,8 @@ public class DataProcessor
 
         try
         {
-            _items = ParseItems();
-            Items = [.. _items.Select(item => item.Key).OrderBy(itemKey => itemKey)];
+            _indexedItemsLines = ParseItems();
+            Items = [.. _indexedItemsLines.Select(item => item.Key).OrderBy(itemKey => itemKey)];
         }
         catch
         {
@@ -27,13 +27,13 @@ public class DataProcessor
 
     private readonly string[] _lines;
 
-    private readonly ReadOnlyDictionary<string, int> _items;
+    private readonly ReadOnlyDictionary<string, int> _indexedItemsLines;
 
     public string[] Items { get; }
 
     public Item GetItem(string itemName)
     {
-        var itemLineIndex = _items[itemName];
+        var itemLineIndex = _indexedItemsLines[itemName];
         var depth = GetLineDepth(itemLineIndex, ItemMarker);
 
         var nextDepth = depth - 1;
