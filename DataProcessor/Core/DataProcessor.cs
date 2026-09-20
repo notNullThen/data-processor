@@ -8,15 +8,8 @@ public class DataProcessor
     {
         _lines = lines;
 
-        try
-        {
-            _indexedItemsLines = GetItems();
-            Items = [.. _indexedItemsLines.Select(item => item.Key).OrderBy(itemKey => itemKey)];
-        }
-        catch
-        {
-            throw new InvalidDataException(InvalidFileMessage);
-        }
+        _indexedItemsLines = GetItems();
+        Items = [.. _indexedItemsLines.Select(item => item.Key).OrderBy(itemKey => itemKey)];
     }
 
     public const string InvalidFileMessage = "[THE DATA FILE IS INVALID] Please re-check the file.";
@@ -44,12 +37,7 @@ public class DataProcessor
         {
             var line = _lines[i];
 
-            if (!line.Contains(StepMarker) && !line.Contains(ItemMarker))
-            {
-                throw new FileLoadException(
-                    $"[INVALID LINE] Line #{i + 1} contains neither the \"{StepMarker}\" step marker nor the \"{ItemMarker}\" item marker. Line content is below:\n{line}\n"
-                );
-            }
+            ValidateLine(line, i);
 
             if (line.Contains(StepMarker) && GetLineDepth(i, StepMarker) == nextDepth)
             {
@@ -68,6 +56,8 @@ public class DataProcessor
         for (var i = 0; i < _lines.Length; i++)
         {
             var line = _lines[i];
+
+            ValidateLine(line, i);
 
             if (line.Contains(ItemMarker))
             {
@@ -90,5 +80,15 @@ public class DataProcessor
             );
 
         return lineDepthLength / IdentLength;
+    }
+
+    private void ValidateLine(string line, int lineIndex)
+    {
+        if (!line.Contains(StepMarker) && !line.Contains(ItemMarker))
+        {
+            throw new FileLoadException(
+                $"[INVALID LINE] Line #{lineIndex + 1} contains neither the \"{StepMarker}\" step marker nor the \"{ItemMarker}\" item marker. Line content is below:\n{line}\n"
+            );
+        }
     }
 }
