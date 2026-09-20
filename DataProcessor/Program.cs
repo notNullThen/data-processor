@@ -5,15 +5,7 @@
 
 var dataFilePath = args[0];
 
-string[] lines = [];
-try
-{
-    lines = File.ReadAllLines(dataFilePath);
-}
-catch
-{
-    throw new FileNotFoundException($"[FILE DOES NOT EXIST] Tried to reach at \"{dataFilePath}\"");
-}
+var lines = File.ReadAllLines(dataFilePath);
 
 var dataProcessor = new DataProcessor.Core.DataProcessor(lines);
 
