@@ -9,7 +9,7 @@ public class DataProcessor
         _lines = lines;
 
         _indexedItemsLines = ParseItems();
-        Items = [.. _indexedItemsLines.Select(item => item.Key).OrderBy(itemKey => itemKey)];
+        OrderedItems = [.. _indexedItemsLines.Select(item => item.Key).OrderBy(itemKey => itemKey)];
     }
 
     public const string InvalidFileMessage = "[THE DATA FILE IS INVALID] Please re-check the file.";
@@ -22,7 +22,7 @@ public class DataProcessor
 
     private readonly ReadOnlyDictionary<string, int> _indexedItemsLines;
 
-    public string[] Items { get; }
+    public string[] OrderedItems { get; }
 
     public Item GetItemByName(string itemName)
     {

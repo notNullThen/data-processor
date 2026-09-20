@@ -11,10 +11,10 @@ var lines = File.ReadAllLines(dataFilePath);
 
 var dataProcessor = new DataProcessor.Core.DataProcessor(lines);
 
-ConsoleUi.PrintItems(dataProcessor.Items);
+ConsoleUi.PrintItems(dataProcessor.OrderedItems);
 
-int parsedIndex = ConsoleUi.ReadItemIndex(dataProcessor.Items.Length);
+int parsedIndex = ConsoleUi.ReadItemIndex(dataProcessor.OrderedItems.Length);
 
-var item = dataProcessor.GetItemByName(dataProcessor.Items[parsedIndex]);
+var item = dataProcessor.GetItemByName(dataProcessor.OrderedItems[parsedIndex]);
 
 ConsoleUi.PrintItemPath(item);
