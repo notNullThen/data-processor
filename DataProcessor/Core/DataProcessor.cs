@@ -24,7 +24,7 @@ public class DataProcessor
 
     public string[] Items { get; }
 
-    public Item GetItem(string itemName)
+    public Item GetItemByName(string itemName)
     {
         var itemLineIndex = _indexedItemsLines[itemName];
         var depth = GetLineDepth(itemLineIndex, ItemMarker);
