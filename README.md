@@ -1,4 +1,6 @@
-My take on Data File processing console .NET app which finds path to specified Item
+My take on **Data File processing console .NET app** which finds path to specified Item.
+
+**Tests are available** - xUnit v3, Allure 3, Microsoft Testing Platform.
 
 ### Project has 2 branches:
 
@@ -19,7 +21,7 @@ My take on Data File processing console .NET app which finds path to specified I
     - Wrong file path.
     - Corrupted file.
 
-## How to run
+## How to run the app
 
 1. Ensure you have installed .NET environment
 2. Clone the project
@@ -36,4 +38,20 @@ cd data-processor/
 4. Run the application
 ```bash
 dotnet run --project DataProcessor DataProcessor/TestData/Data.medium.txt
+```
+
+
+## How to run tests
+
+From the project root, run:
+
+```bash
+dotnet test
+```
+
+
+To generate and open the Allure report, run:
+
+```bash
+dotnet test && allure generate DataProcessor.Tests/bin/Debug/net10.0/TestResults/allure-results && allure open allure-report
 ```
