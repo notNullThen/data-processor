@@ -86,7 +86,7 @@ public class DataProcessorCore
     {
         if (!line.Contains(StepMarker) && !line.Contains(ItemMarker))
         {
-            throw new FileLoadException(
+            throw new InvalidDataException(
                 $"[INVALID LINE] Line #{lineIndex + 1} contains neither the \"{StepMarker}\" step marker nor the \"{ItemMarker}\" item marker. Line content is below:\n{line}\n"
             );
         }
