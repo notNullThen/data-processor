@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="DataProcessor.Tests/DataProcessor.Tests.csproj" />
   <Project Path="DataProcessor/DataProcessor.csproj" />
 </Solution>
