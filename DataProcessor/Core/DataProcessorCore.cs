@@ -2,9 +2,9 @@ using System.Collections.ObjectModel;
 
 namespace DataProcessor.Core;
 
-public class DataProcessor
+public class DataProcessorCore
 {
-    public DataProcessor(string[] lines)
+    public DataProcessorCore(string[] lines)
     {
         _lines = lines;
 

@@ -9,7 +9,7 @@ var dataFilePath = args[0];
 
 var lines = File.ReadAllLines(dataFilePath);
 
-var dataProcessor = new DataProcessor.Core.DataProcessor(lines);
+var dataProcessor = new DataProcessor.Core.DataProcessorCore(lines);
 
 ConsoleUi.PrintItems(dataProcessor.OrderedItems);
 
