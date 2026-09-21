@@ -15,8 +15,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="xunit.v3.assert" Version="4.0.1" />
 
     <PackageReference Include="Allure.Xunit.v3" Version="3.0.0-preview.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../DataProcessor/DataProcessor.csproj" />
   </ItemGroup>
 
   <ItemGroup>
