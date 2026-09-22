@@ -1,3 +1,5 @@
+using DataProcessor.Core;
+
 namespace DataProcessor.ConsoleHandler;
 
 public static class ConsoleFormatter
@@ -18,5 +20,20 @@ public static class ConsoleFormatter
         }
 
         return parseSucceded;
+    }
+
+    public static string[] GetItemPath(Item item)
+    {
+        item = item.First;
+
+        List<string> path = [];
+
+        while (item != null)
+        {
+            path.Add(item.Value!);
+            item = item.Next!;
+        }
+
+        return [.. path];
     }
 }

@@ -39,10 +39,7 @@ public static class ConsoleUi
 
     public static void PrintItemPath(Item item)
     {
-        while (item != null)
-        {
-            Console.WriteLine($"{item.Value}");
-            item = item.Next!;
-        }
+        foreach (var step in ConsoleFormatter.GetItemPath(item))
+            Console.WriteLine($"{step}");
     }
 }

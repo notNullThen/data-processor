@@ -1,4 +1,5 @@
-﻿using DataProcessor.Core;
+﻿using DataProcessor.ConsoleHandler;
+using DataProcessor.Core;
 using DataProcessor.Tests.TestData;
 
 namespace DataProcessor.Tests;
@@ -45,7 +46,8 @@ public class DataProcessingTests
         var lines = DataMedium.Value;
         var dp = new DataProcessorCore(lines);
 
-        var actualPath = dp.GetItemPath(itemName);
+        var item = dp.GetItemByName(itemName);
+        var actualPath = ConsoleFormatter.GetItemPath(item);
 
         Assert.Equal(expectedPath, actualPath);
     }
@@ -57,7 +59,8 @@ public class DataProcessingTests
         var lines = DataDifferentIdent.Value;
         var dp = new DataProcessorCore(lines);
 
-        var actualPath = dp.GetItemPath(itemName);
+        var item = dp.GetItemByName(itemName);
+        var actualPath = ConsoleFormatter.GetItemPath(item);
 
         Assert.Equal(expectedPath, actualPath);
     }
